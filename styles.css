@@ -56,13 +56,18 @@ nav ul li button:hover {
     text-align: center;
 }
 
-#about {
+#intro {
     background-color: #34495e;
     color: #ecf0f1;
 }
 
+#about {
+    background-color: #1abc9c;
+    color: #ecf0f1;
+}
+
 #images {
-    background-color: #2c3e50;
+    background-color: #e74c3c;
     color: #ecf0f1;
 }
 
@@ -78,6 +83,44 @@ footer {
 
 html {
     scroll-behavior: smooth;
+}
+
+.intro-buttons {
+    margin-top: 20px;
+}
+
+.intro-buttons button {
+    margin: 0 10px;
+    background-color: #3498db;
+    color: #ecf0f1;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.intro-buttons button:hover {
+    background-color: #2980b9;
+}
+
+.employment-buttons {
+    margin-top: 20px;
+}
+
+.employment-buttons button {
+    margin: 0 10px;
+    background-color: #3498db;
+    color: #ecf0f1;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.employment-buttons button:hover {
+    background-color: #2980b9;
 }
 
 .job-content {
