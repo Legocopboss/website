@@ -5,7 +5,7 @@ import me from '../../assets/missing_texture.png'
 import HeaderSocials from './HeaderSocials'
 
 const Header = () => {
-    reaturn (
+    return (
         <header id="home">
             <div className="container header__container">
                 <h5>Hello, My name is</h5>

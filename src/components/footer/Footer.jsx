@@ -7,7 +7,7 @@ import { BsTwitterX } from 'react-icons/bs'
 const Footer = () => {
     return (
         <footer>
-            <a href="#home" className='footer__logo'>BMPOOL</a>
+            <a href="#home" className='footer__logo'>Braden Pool</a>
             <ul className='permalinks'>
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>

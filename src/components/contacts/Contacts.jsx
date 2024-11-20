@@ -3,7 +3,6 @@ import './contacts.css'
 import { MdOutlineEmail } from 'react-icons/md'
 import { BsLinkedin } from 'react-icons/bs'
 import { useRef } from 'react'
-import { Link } from 'react-router'
 
 const Contacts = () => {
 
@@ -18,7 +17,8 @@ const Contacts = () => {
                 <div className='contact__options'>
                     <article className='contact__option'>
                         <BsLinkedin className='contact__option-icon'/>
-                        <Link to ='https://www.linkedin.com/in/braden-pool/'>Connect on LinkedIn</Link>
+                        <h4>LinkedIn</h4>
+                        <a href ='https://www.linkedin.com/in/braden-pool/'>Connect on LinkedIn</a>
                     </article>
 
                     <article className='contact__option'>
