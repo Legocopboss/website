@@ -44,11 +44,12 @@ const About = () => {
                     </article>
                 </div>
                 <p>
-                    I am a Computer Science Undergraduate at Indiana University Bloomington.
+                    I am currently a Software Engineer at State Farm Insurance working in Enterprise Technology. My job entails fixing and creating back and front end implementations into the Salesforce enterprise used by Agents.
+                    I am a recent Graduate of Indiana University - Bloomington with my Bachelor's in Science in Computer Science with a minor in Intelligent Systems Engineering.
                     I graduated Heartland Community College with my Associates in Computer Science the same year I graduated High School.
-                    Coming in with two years under my belt, I am able to graduate university as a sophmore. 
+                    Coming in with two years under my belt, I was able to graduate university as a sophmore. 
                     With a strong academic foundation in software engineering and intelligent systems engineering, as well as my experiences on campus and in a corporate setting,
-                    I am eager to contribute to innovateive projects and learn more from experienced professionals. I am a quick learner who is always ready for a challenge.
+                    I am eager to contribute to innovative projects and learn more from experienced professionals. I am a quick learner who is always ready for a challenge.
                 </p>
             </div>
         </div>
