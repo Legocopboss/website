@@ -2,11 +2,74 @@ import React from 'react'
 import './contacts.css'
 import { MdOutlineEmail } from 'react-icons/md'
 import { BsLinkedin } from 'react-icons/bs'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
+import emailjs from '@emailjs/browser'
 
 const Contacts = () => {
 
     const form = useRef()
+    const [loading, setLoading] = useState(false)
+    const [submitted, setSubmitted] = useState(false)
+    const [error, setError] = useState(null)
+
+    // Initialize EmailJS on component mount
+    React.useEffect(() => {
+        // Replace with your actual Public Key from EmailJS dashboard
+        emailjs.init('YOUR_PUBLIC_KEY_HERE')
+    }, [])
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        setLoading(true)
+        setError(null)
+
+        // Validate form fields
+        const name = form.current.name.value.trim()
+        const email = form.current.email.value.trim()
+        const message = form.current.message.value.trim()
+
+        if (!name) {
+            setError('Please enter your name')
+            setLoading(false)
+            return
+        }
+
+        if (!email) {
+            setError('Please enter your email')
+            setLoading(false)
+            return
+        }
+
+        if (!message) {
+            setError('Please enter a message')
+            setLoading(false)
+            return
+        }
+
+        // Send email using EmailJS
+        emailjs
+            .sendForm(
+                'YOUR_SERVICE_ID_HERE',      // Replace with your Service ID
+                'YOUR_TEMPLATE_ID_HERE',     // Replace with your Template ID
+                form.current
+            )
+            .then(
+                (result) => {
+                    setSubmitted(true)
+                    form.current.reset()
+                    setLoading(false)
+                    // Auto-hide success message after 5 seconds
+                    setTimeout(() => {
+                        setSubmitted(false)
+                    }, 5000)
+                },
+                (error) => {
+                    setError('Failed to send message. Please try again.')
+                    setLoading(false)
+                    console.error('EmailJS error:', error)
+                }
+            )
+    }
 
     return (
         <section id="contacts">
@@ -28,11 +91,46 @@ const Contacts = () => {
                     </article>
                 </div>
 
-                <form ref={form}>
-                    <input type="text" name="name" placeholder="Your Full Name" required />  {/* client side validation */}
-                    <input type="email" name='email' placeholder='Your Email' required /> 
-                    <textarea name="message" rows="7" placeholder='Your Message' required></textarea>
-                    <button type="submit" className='btn btn-primary'>Send Message</button>
+                <form ref={form} onSubmit={handleSubmit}>
+                    {submitted && (
+                        <div className='form__message form__message--success'>
+                            ✓ Message sent successfully! I'll get back to you soon.
+                        </div>
+                    )}
+                    {error && (
+                        <div className='form__message form__message--error'>
+                            ✕ {error}
+                        </div>
+                    )}
+                    
+                    <input 
+                        type="text" 
+                        name="name" 
+                        placeholder="Your Full Name" 
+                        required 
+                        disabled={loading}
+                    />  
+                    <input 
+                        type="email" 
+                        name='email' 
+                        placeholder='Your Email' 
+                        required
+                        disabled={loading}
+                    /> 
+                    <textarea 
+                        name="message" 
+                        rows="7" 
+                        placeholder='Your Message' 
+                        required
+                        disabled={loading}
+                    ></textarea>
+                    <button 
+                        type="submit" 
+                        className='btn btn-primary'
+                        disabled={loading}
+                    >
+                        {loading ? 'Sending...' : 'Send Message'}
+                    </button>
                 </form>
             </div>
         </section>

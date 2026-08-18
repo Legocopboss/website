@@ -5,9 +5,12 @@ import { BiUser } from "react-icons/bi"
 import { FaLaptopCode } from "react-icons/fa"
 import { BiMessageSquareDetail } from "react-icons/bi"
 import { FaBook } from "react-icons/fa"
+import { GiHamburgerMenu } from "react-icons/gi"
+import { MdClose } from "react-icons/md"
 
 const Nav = () => {
     const [activeNav, setActiveNav] = useState('#')
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const ignoreObserverRef = React.useRef(false)
 
     useEffect(() => {
@@ -84,6 +87,9 @@ const Nav = () => {
         const el = document.getElementById(id)
         if (!el) return
 
+        // Close mobile menu when navigation link is clicked
+        setIsMobileMenuOpen(false)
+
         // Prevent observer from changing active state while we smooth-scroll
         ignoreObserverRef.current = true
         setActiveNav(`#${id}`)
@@ -106,14 +112,59 @@ const Nav = () => {
         }, timeout)
     }
 
+    const navLinks = [
+        { id: 'home', label: 'Home', icon: <AiOutlineHome /> },
+        { id: 'about', label: 'About', icon: <BiUser /> },
+        { id: 'experience', label: 'Experience', icon: <FaLaptopCode /> },
+        { id: 'goodreads', label: 'Goodreads', icon: <FaBook /> },
+        { id: 'contacts', label: 'Contact', icon: <BiMessageSquareDetail /> },
+    ]
+
     return (
-        <nav>
-            <a href="#home" onClick={(e) => handleClick(e, 'home')} className={activeNav === '#' ? 'active': ''}><AiOutlineHome/></a>
-            <a href="#about" onClick={(e) => handleClick(e, 'about')} className={activeNav === '#about' ? 'active': ''}><BiUser/></a>
-            <a href="#experience" onClick={(e) => handleClick(e, 'experience')} className={activeNav === '#experience' ? 'active': ''}><FaLaptopCode/></a>
-            <a href="#goodreads" onClick={(e) => handleClick(e, 'goodreads')} className={activeNav === '#goodreads' ? 'active': ''}><FaBook/></a>
-            <a href="#contacts" onClick={(e) => handleClick(e, 'contacts')} className={activeNav === '#contacts' ? 'active': ''}><BiMessageSquareDetail/></a>
-        </nav>
+        <>
+            {/* Desktop Navigation */}
+            <nav className="nav__desktop">
+                {navLinks.map((link) => (
+                    <a
+                        key={link.id}
+                        href={`#${link.id}`}
+                        onClick={(e) => handleClick(e, link.id)}
+                        className={activeNav === `#${link.id}` ? 'active' : ''}
+                        title={link.label}
+                    >
+                        {link.icon}
+                    </a>
+                ))}
+            </nav>
+
+            {/* Mobile Navigation */}
+            <div className="nav__mobile">
+                <button
+                    className="nav__hamburger"
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    aria-label="Toggle navigation menu"
+                    aria-expanded={isMobileMenuOpen}
+                >
+                    {isMobileMenuOpen ? <MdClose /> : <GiHamburgerMenu />}
+                </button>
+
+                {isMobileMenuOpen && (
+                    <div className="nav__mobile-menu">
+                        {navLinks.map((link) => (
+                            <a
+                                key={link.id}
+                                href={`#${link.id}`}
+                                onClick={(e) => handleClick(e, link.id)}
+                                className={activeNav === `#${link.id}` ? 'active' : ''}
+                            >
+                                {link.icon}
+                                <span>{link.label}</span>
+                            </a>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </>
     )
 }
 
