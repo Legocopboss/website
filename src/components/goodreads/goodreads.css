@@ -44,3 +44,8 @@
     /* customize your rating stars here */
     float: right;
 }
+
+/* Hide Mantine carousel status text inside the goodreads section (Slide X of X) */
+#goodreads .mantine-VisuallyHidden-root {
+    display: none !important;
+}

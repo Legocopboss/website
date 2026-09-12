@@ -6,10 +6,12 @@ import Goodreads from './components/goodreads/Goodreads'
 import Experience from './components/experience/Experience'
 import Contacts from './components/contacts/Contacts'
 import Footer from './components/footer/Footer'
+import { Notifications } from '@mantine/notifications'
 
 const App = () => {
     return (
         <>
+            <Notifications />
             <Header/>
             <Nav/>
             <About/>
