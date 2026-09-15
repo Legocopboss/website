@@ -1,3 +1,7 @@
+Change log (detailed)
+ - 2026-08-24: Initial fix — added carousel CSS import, set `slideSize`, fixed `BookCard` flex rules.
+ - 2026-08-24: Visual polish — shadow, outline, hover, review wrapping; centered headers.
+ - 2026-09-12: Added responsive carousel behavior: slideSize set to percentage and breakpoints added so more cards show on larger screens; Container maxWidth constrained to reduce empty desktop whitespace.
 # Goodreads Carousel — Maintainer Notes (Checkpoint)
 
 Purpose

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Container, Card, Text, Group, Stack, Title, Rating, useMantineTheme, Anchor } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { Carousel } from '@mantine/carousel'
 import './goodreads.css'
 
@@ -59,6 +60,7 @@ const toReadBooks = [
 
 function BookCard({ book }) {
   const theme = useMantineTheme()
+  const isXSmall = useMediaQuery('(max-width: 600px)')
   return (
     <Card
       shadow="md"
@@ -69,7 +71,8 @@ function BookCard({ book }) {
         backgroundColor: t.colorScheme === 'dark' ? t.colors.dark[6] : t.white,
         color: t.colorScheme === 'dark' ? t.white : t.black,
         minHeight: 320,
-        width: 300,
+        width: '100%',
+        maxWidth: 320,
         boxSizing: 'border-box',
         border: `2px solid ${t.colorScheme === 'dark' ? t.colors[theme.primaryColor][6] : t.colors[theme.primaryColor][6]}`,
         boxShadow: t.shadows.md,
@@ -77,7 +80,7 @@ function BookCard({ book }) {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',
-        flex: '0 0 auto',
+        // allow carousel to control slide sizing
         '&:hover': {
           transform: 'translateY(-6px)',
           boxShadow: t.shadows.lg,
@@ -91,7 +94,7 @@ function BookCard({ book }) {
           </div>
         </Anchor>
 
-          <Stack spacing={8} style={{ flex: 1, minWidth: 140 }}>
+          <Stack spacing={8} style={{ flex: 1, minWidth: 140, textAlign: isXSmall ? 'center' : 'left' }}>
           <Anchor href={book.link} target="_blank" rel="noopener noreferrer">
             <Text weight={700} size="lg" sx={{ color: theme.colors[theme.primaryColor][4] }}>{book.title}</Text>
           </Anchor>
@@ -113,22 +116,40 @@ function BookCard({ book }) {
 
 const Goodreads = () => {
   const theme = useMantineTheme()
-  const breakpoints = [{ maxWidth: 980, slideSize: '50%' }, { maxWidth: 640, slideSize: '100%' }]
+  const breakpoints = [
+    { maxWidth: 1200, slideSize: '33%' },
+    { maxWidth: 900, slideSize: '50%' },
+    { maxWidth: 600, slideSize: '100%' },
+  ]
+
+  const isXSmall = useMediaQuery('(max-width: 600px)')
+  const isSmall = useMediaQuery('(max-width: 900px)')
+  const isMedium = useMediaQuery('(max-width: 1200px)')
+
+  let computedSlideSize = '30%'
+  if (isXSmall) computedSlideSize = '100%'
+  else if (isSmall) computedSlideSize = '50%'
+  else if (isMedium) computedSlideSize = '33%'
+
+  const computedAlign = 'center'
+
+  const computedSlideGap = isXSmall ? 12 : 16
 
   return (
     <section id="goodreads">
-      <Container style={{ paddingTop: 10, paddingBottom: 30 }}>
+      <Container style={{ paddingTop: 10, paddingBottom: 30, maxWidth: 1100, margin: '0 auto' }}>
+        <div className="bookshelf-wrapper">
         <div style={{ textAlign: 'center', marginBottom: 8 }}>
-          <Title order={2} align="center" style={{ marginBottom: 6 }}>Braden's bookshelf</Title>
+          <Title order={2} align="center" style={{ marginBottom: 6 }}>My Bookshelf</Title>
           <br/>
         </div>
 
         <Title order={4} align="center" style={{ marginBottom: 12, marginTop: 8, letterSpacing: '0.06em' }}>Recently Read</Title>
         <Carousel
-          slideSize="300px"
-          slideGap={24}
+          slideSize={computedSlideSize}
+          slideGap={computedSlideGap}
           breakpoints={breakpoints}
-          align="center"
+          align={computedAlign}
           withIndicators
           loop
           styles={{
@@ -144,13 +165,13 @@ const Goodreads = () => {
             </Carousel.Slide>
           ))}
         </Carousel>
-
+          <br/>
         <Title order={4} align="center" style={{ marginTop: 20, marginBottom: 12, letterSpacing: '0.06em' }}>Up next</Title>
         <Carousel
-          slideSize="300px"
-          slideGap={24}
+          slideSize={computedSlideSize}
+          slideGap={computedSlideGap}
           breakpoints={breakpoints}
-          align="center"
+          align={computedAlign}
           withIndicators
           loop
           styles={{
@@ -166,6 +187,7 @@ const Goodreads = () => {
             </Carousel.Slide>
           ))}
         </Carousel>
+        </div>
       </Container>
     </section>
   )

@@ -49,3 +49,28 @@
 #goodreads .mantine-VisuallyHidden-root {
     display: none !important;
 }
+
+/* Responsive override: force single-slide on narrow screens to avoid squishing */
+@media (max-width: 600px) {
+    #goodreads .mantine-Carousel-root {
+        --carousel-slide-size: 100% !important;
+        --carousel-slide-gap: 12px !important;
+    }
+    #goodreads .mantine-Carousel-slide {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* Bookshelf wrapper border and spacing */
+#goodreads .bookshelf-wrapper {
+    background: var(--color-bg-variant);
+    border: 1px solid transparent;
+    padding: 18px;
+    border-radius: 1rem;
+    transition: var(--transition);
+}
+
+#goodreads .bookshelf-wrapper:hover {
+    border-color: var(--color-primary);
+}
