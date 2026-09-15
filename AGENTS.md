@@ -49,3 +49,51 @@ This document captures what I learned, troubleshooting steps, and actionable adv
 - Document any external dependencies (e.g., Mantine packages) and ensure `package.json` version constraints are acceptable.
 
 If you'd like, I can also add a short automated checklist script or tests to validate the carousel layout across breakpoints.
+
+---
+
+**Recent Changes & Repo Updates (what I changed during this session)**
+- Removed `@mantine/prism` from `package.json` (it was a peer-version mismatch and not referenced in the codebase).
+- Pinned `@mantine/*` dependencies to `9.5.2` to avoid npm resolving to `9.6.x` which requires React 19.
+- Updated React and React DOM to `^19.2.8` and updated `@testing-library/react` to a version compatible with React 19 so Mantine peers resolve correctly.
+- Added `eslint` as a devDependency, ran `npx eslint --fix` across `src/`, and added a `lint` script in `package.json`.
+- Added a basic smoke test (`src/App.test.jsx`) and test setup (`src/setupTests.js`) including an `IntersectionObserver` mock and `@testing-library/jest-dom` import.
+- Added CI workflow `.github/workflows/ci.yml` that runs `npm ci`, `npm audit` (moderate level), caches npm, runs `eslint`, unit tests, `npm run build`, and Playwright UI tests.
+
+**How to navigate dependency / install issues**
+- If you hit peer conflicts (ERESOLVE) during `npm install`, inspect `package.json` for mixed major versions among related packages (Mantine and React are the most common here).
+- Quick fixes:
+	- Pin the package versions that must remain aligned (example: pin all `@mantine/*` to the same minor/patch).
+	- Upgrade React and related libs together if you want to move to a newer major (I upgraded to React 19 here to satisfy newer Mantine peers).
+	- As an emergency unblock in CI, use `npm ci --legacy-peer-deps` or set `NPM_CONFIG_LEGACY_PEER_DEPS=true` (not recommended long-term).
+- After changing versions, run a clean install locally:
+	```bash
+	rm -rf node_modules package-lock.json
+	npm install
+	```
+
+**CI / Pipeline notes**
+- CI now enforces: install → `npm audit --audit-level=moderate` → lint → unit tests → build → Playwright UI tests. Failing any of those will block merges.
+- To speed debugging in CI: check the `List Mantine packages` step output included in the workflow.
+- If Playwright tests are not present yet, the Playwright step can be gated to only run when tests exist or the job can be made conditional.
+
+**Testing notes for next agent**
+- `src/setupTests.js` contains polyfills and imports required by tests:
+	- `IntersectionObserver` mock (simple stub) — used because some components use intersection-based effects.
+	- `@testing-library/jest-dom` import so matchers like `toBeInTheDocument()` are available.
+- When adding new tests for Mantine components, either wrap tested components in `MantineProvider` or mock/limit Mantine usage to prevent theme/provider errors.
+
+**Security & Dependabot**
+- CI runs `npm audit` at moderate level. For an automated dependency update flow, add Dependabot (`.github/dependabot.yml`) so dependency PRs open automatically.
+- If you want deeper scanning, consider adding CodeQL or Snyk in addition to `npm audit`.
+
+**Node / engine warnings**
+- Installation logs may show EBADENGINE warnings for packages that require newer Node (for example `email-js` requiring Node >=22). These are warnings, not blockers — but consider updating the package or upgrading the Node runtime in CI if you rely on it.
+
+**If something breaks**
+- Reproduce locally with a clean install, then narrow down by rolling back the package you recently changed or running `npm ls <package>` to see which dependency pulled an incompatible version.
+- Ask: do you want to standardize on React 19 for the repo, or prefer to keep React 18 and pin Mantine to 9.5.2? I documented the current decision (React 19 + Mantine 9.5.2 pin) in this file.
+
+---
+
+If you'd like, I can now add a `.github/dependabot.yml` to enable automated dependency PRs (recommended). Also I can create a small Playwright smoke test so CI actually validates the main page render. Tell me which to add next.
